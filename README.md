@@ -28,3 +28,15 @@ vp check
 vp test
 vp run ready
 ```
+
+Run the playground during component development:
+
+```bash
+vp run dev
+```
+
+Run the documentation website separately:
+
+```bash
+vp run dev:website
+```

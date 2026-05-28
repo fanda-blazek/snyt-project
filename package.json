@@ -1,5 +1,5 @@
 {
-  "name": "snyt",
+  "name": "snyt-monorepo",
   "version": "0.0.0",
   "private": true,
   "description": "Headless UI primitives built on native Custom Elements.",
@@ -12,7 +12,8 @@
   "type": "module",
   "scripts": {
     "ready": "vp check && vp run -r test && vp run -r build",
-    "dev": "vp run website#dev",
+    "dev": "vp run playground#dev",
+    "dev:website": "vp run website#dev",
     "prepare": "vp config"
   },
   "devDependencies": {
