@@ -5,6 +5,9 @@ export default defineConfig({
     "*": "vp check --fix",
   },
   fmt: {},
+  test: {
+    exclude: ["tests/e2e/**"],
+  },
   lint: {
     jsPlugins: [{ name: "vite-plus", specifier: "vite-plus/oxlint-plugin" }],
     rules: { "vite-plus/prefer-vite-plus-imports": "error" },

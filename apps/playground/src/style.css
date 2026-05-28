@@ -203,6 +203,57 @@ code {
   }
 }
 
+#component-lab {
+  display: grid;
+  gap: 20px;
+  padding: 40px 32px;
+  place-items: center;
+  border-top: 1px solid var(--border);
+
+  p {
+    max-width: 560px;
+  }
+}
+
+.toggle-preview {
+  display: inline-flex;
+}
+
+.toggle-button {
+  min-width: 104px;
+  min-height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text-h);
+  font: 600 16px/1 var(--sans);
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--accent-border);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  &[data-pressed] {
+    border-color: var(--accent);
+    background: var(--accent-bg);
+    color: var(--accent);
+  }
+}
+
+#toggle-state {
+  min-width: 92px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: var(--code-bg);
+  color: var(--text-h);
+  font: 15px/135% var(--mono);
+}
+
 #docs {
   border-right: 1px solid var(--border);
 

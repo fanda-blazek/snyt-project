@@ -26,6 +26,7 @@ This repository uses Vite+.
 vp install
 vp check
 vp test
+vp run test:e2e
 vp run ready
 ```
 
