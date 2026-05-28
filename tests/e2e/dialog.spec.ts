@@ -94,6 +94,14 @@ test("snyt-dialog-root opens with command buttons and syncs state, events, aria,
   await expect
     .poll(() => page.evaluate(() => document.documentElement.style.overflow))
     .toBe("hidden");
+  await expect(page.locator("html")).toHaveAttribute("data-snyt-scroll-locked", "");
+  await expect
+    .poll(() =>
+      page.evaluate(() =>
+        document.documentElement.style.getPropertyValue("--snyt-scrollbar-width"),
+      ),
+    )
+    .toMatch(/\d+px/);
 
   await close.click();
 
@@ -102,6 +110,14 @@ test("snyt-dialog-root opens with command buttons and syncs state, events, aria,
   await expect(popup).not.toHaveAttribute("open");
   await expect(open).toHaveAttribute("aria-expanded", "false");
   await expect.poll(() => page.evaluate(() => document.documentElement.style.overflow)).toBe("");
+  await expect(page.locator("html")).not.toHaveAttribute("data-snyt-scroll-locked");
+  await expect
+    .poll(() =>
+      page.evaluate(() =>
+        document.documentElement.style.getPropertyValue("--snyt-scrollbar-width"),
+      ),
+    )
+    .toBe("");
   await expect
     .poll(() =>
       page.evaluate(() => ({
@@ -168,7 +184,9 @@ test("snyt-dialog-root syncs direct native showModal, show, close, and root hide
 
   await page.evaluate(() =>
     (
-      document.querySelector("snyt-dialog-root") as { hide: (options?: object) => void } | null
+      document.querySelector("snyt-dialog-root") as unknown as {
+        hide: (options?: object) => void;
+      } | null
     )?.hide({
       restoreFocus: false,
     }),
@@ -178,6 +196,8 @@ test("snyt-dialog-root syncs direct native showModal, show, close, and root hide
   await page.evaluate(() => document.querySelector<HTMLDialogElement>("#case-popup")?.show());
   await expect(page.locator("snyt-dialog-root#case")).toHaveAttribute("open", "");
   await expect(page.locator("snyt-dialog-root#case")).not.toHaveAttribute("data-modal");
+  await expect(page.locator("html")).not.toHaveAttribute("data-snyt-scroll-locked");
+  await expect.poll(() => page.evaluate(() => document.documentElement.style.overflow)).toBe("");
 
   await page.evaluate(() => document.querySelector<HTMLDialogElement>("#case-popup")?.close());
   await expect(page.locator("snyt-dialog-root#case")).not.toHaveAttribute("open");

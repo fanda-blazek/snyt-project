@@ -173,7 +173,7 @@ export class SnytDialogRootElement extends HTMLElementBase {
 
     if (this.isModalOpen) {
       modalDialogStack.add(this);
-      this.releaseScrollLock = lockScroll(this);
+      this.releaseScrollLock = lockScroll(this, { referenceElement: this.popupElement });
     }
 
     this.syncStateAttributes();
