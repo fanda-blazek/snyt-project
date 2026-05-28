@@ -1,6 +1,7 @@
 export {
   defineSnytDialog,
   SnytDialogBackdropElement,
+  type SnytDialogHideOptions,
   SnytDialogPanelElement,
   SnytDialogRootElement,
 } from "./dialog.ts";
@@ -12,5 +13,4 @@ export {
   SNYT_DIALOG_PANEL_TAG_NAME,
   SNYT_DIALOG_ROOT_TAG_NAME,
 } from "./constants.ts";
-export { type SnytDialogHideOptions } from "./types.ts";
 export { snytDialogComponent } from "./meta.ts";

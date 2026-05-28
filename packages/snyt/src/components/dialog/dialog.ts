@@ -16,7 +16,6 @@ import {
 } from "./constants.ts";
 import { getDialogStateElements, queryDialogParts } from "./parts.ts";
 import { isDefaultTrueAttributeEnabled, setDialogStateAttributes } from "./state.ts";
-import type { SnytDialogHideOptions } from "./types.ts";
 
 const HTMLElementBase =
   globalThis.HTMLElement ??
@@ -31,6 +30,10 @@ type DialogRequestCloseMethod = HTMLDialogElement & {
   requestClose?: (returnValue?: string) => void;
 };
 type CommandAction = "close" | "request-close" | "show-modal";
+
+export interface SnytDialogHideOptions {
+  restoreFocus?: boolean;
+}
 
 const modalDialogStack = new SnytOverlayStack<SnytDialogRootElement>();
 
