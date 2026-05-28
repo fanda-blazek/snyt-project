@@ -12,18 +12,8 @@ export {
   SNYT_DIALOG_TRIGGER_ATTRIBUTE,
   SNYT_DIALOG_VIEWPORT_ATTRIBUTE,
   SnytDialogElement,
-  snytDialogComponent,
   type SnytDialogCancelEventDetail,
   type SnytDialogChangeEventDetail,
   type SnytDialogChangeReason,
-} from "./dialog/index.ts";
-export {
-  defineSnytToggle,
-  SNYT_TOGGLE_CHANGE_EVENT,
-  SNYT_TOGGLE_TAG_NAME,
-  SNYT_TOGGLE_TRIGGER_ATTRIBUTE,
-  SnytToggleElement,
-  snytToggleComponent,
-  type SnytToggleChangeEventDetail,
-  type SnytToggleChangeReason,
-} from "./toggle/index.ts";
+} from "./dialog.ts";
+export { snytDialogComponent } from "./meta.ts";

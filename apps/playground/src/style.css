@@ -203,7 +203,8 @@ code {
   }
 }
 
-#component-lab {
+#component-lab,
+#dialog-lab {
   display: grid;
   gap: 20px;
   padding: 40px 32px;
@@ -213,6 +214,10 @@ code {
   p {
     max-width: 560px;
   }
+}
+
+#dialog-lab {
+  gap: 18px;
 }
 
 .toggle-preview {
@@ -247,6 +252,96 @@ code {
 
 #toggle-state {
   min-width: 92px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: var(--code-bg);
+  color: var(--text-h);
+  font: 15px/135% var(--mono);
+}
+
+.dialog-preview {
+  display: inline-grid;
+  gap: 12px;
+  place-items: center;
+}
+
+.dialog-trigger,
+.dialog-button {
+  min-height: 40px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0 14px;
+  font: 600 15px/1 var(--sans);
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+.dialog-trigger {
+  background: var(--text-h);
+  color: var(--bg);
+
+  &:hover {
+    border-color: var(--accent-border);
+  }
+}
+
+.dialog-popup {
+  width: min(420px, calc(100vw - 32px));
+  border: 0;
+  border-radius: 8px;
+  padding: 0;
+  background: transparent;
+  color: var(--text-h);
+
+  &::backdrop {
+    background: rgb(8 6 13 / 45%);
+  }
+}
+
+.dialog-panel {
+  display: grid;
+  gap: 22px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 22px;
+  background: var(--bg);
+  box-shadow: var(--shadow);
+  text-align: left;
+
+  h3 {
+    margin: 0 0 8px;
+    font: 600 20px/1.2 var(--heading);
+    color: var(--text-h);
+  }
+
+  p {
+    font-size: 15px;
+  }
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.dialog-button.secondary {
+  background: var(--bg);
+  color: var(--text-h);
+}
+
+.dialog-button.danger {
+  border-color: #b91c1c;
+  background: #b91c1c;
+  color: white;
+}
+
+#dialog-state {
+  min-width: 72px;
   padding: 4px 8px;
   border-radius: 4px;
   background: var(--code-bg);

@@ -12,6 +12,21 @@ This package contains the runtime code for Snyt. Components will be added here a
 </snyt-toggle>
 ```
 
+## Dialog
+
+```html
+<snyt-dialog>
+  <button type="button" data-snyt-dialog-trigger>Open dialog</button>
+  <dialog data-snyt-dialog-popup>
+    <div data-snyt-dialog-panel>
+      <h2 data-snyt-dialog-title>Dialog title</h2>
+      <p data-snyt-dialog-description>Dialog description.</p>
+      <button type="button" data-snyt-dialog-close>Close</button>
+    </div>
+  </dialog>
+</snyt-dialog>
+```
+
 Importing the package registers the element:
 
 ```ts
