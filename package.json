@@ -2,6 +2,13 @@
   "name": "snyt",
   "version": "0.0.0",
   "private": true,
+  "description": "Headless UI primitives built on native Custom Elements.",
+  "keywords": [
+    "custom-elements",
+    "headless-ui",
+    "ui-primitives",
+    "web-components"
+  ],
   "type": "module",
   "scripts": {
     "ready": "vp check && vp run -r test && vp run -r build",
