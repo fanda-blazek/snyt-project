@@ -8,7 +8,7 @@ Parts: root, trigger, backdrop, viewport, popup, panel, title, description, clos
 
 Native base: `<dialog>` where possible, dialog ARIA and focus management where needed.
 
-Current runtime API:
+## API
 
 ```html
 <snyt-dialog>

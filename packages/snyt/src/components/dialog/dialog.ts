@@ -1,46 +1,32 @@
-import {
-  isBooleanAttributePresent,
-  setBooleanAttribute,
-  setStringAttribute,
-} from "../../internal/attributes.ts";
+import { isBooleanAttributePresent, setBooleanAttribute } from "../../internal/attributes.ts";
 import { defineElement } from "../../internal/define-element.ts";
 import { containsPoint } from "../../internal/dom.ts";
 import { dispatchSnytChangeEvent } from "../../internal/events.ts";
-import { ensureElementId } from "../../internal/id.ts";
 import { SnytOverlayStack } from "../../internal/overlay-stack.ts";
 import { lockScroll } from "../../internal/scroll-lock.ts";
-
-export const SNYT_DIALOG_TAG_NAME = "snyt-dialog";
-export const SNYT_DIALOG_CHANGE_EVENT = "snyt-dialog-change";
-export const SNYT_DIALOG_CANCEL_EVENT = "snyt-dialog-cancel";
-export const SNYT_DIALOG_TRIGGER_ATTRIBUTE = "data-snyt-dialog-trigger";
-export const SNYT_DIALOG_POPUP_ATTRIBUTE = "data-snyt-dialog-popup";
-export const SNYT_DIALOG_VIEWPORT_ATTRIBUTE = "data-snyt-dialog-viewport";
-export const SNYT_DIALOG_BACKDROP_ATTRIBUTE = "data-snyt-dialog-backdrop";
-export const SNYT_DIALOG_PANEL_ATTRIBUTE = "data-snyt-dialog-panel";
-export const SNYT_DIALOG_TITLE_ATTRIBUTE = "data-snyt-dialog-title";
-export const SNYT_DIALOG_DESCRIPTION_ATTRIBUTE = "data-snyt-dialog-description";
-export const SNYT_DIALOG_CLOSE_ATTRIBUTE = "data-snyt-dialog-close";
-
-export type SnytDialogChangeReason =
-  | "api"
-  | "trigger"
-  | "close"
-  | "cancel"
-  | "light-dismiss"
-  | "native";
-
-export interface SnytDialogChangeEventDetail {
-  modal: boolean;
-  open: boolean;
-  reason: SnytDialogChangeReason;
-  trigger: Element | null;
-}
-
-export interface SnytDialogCancelEventDetail {
-  reason: "cancel" | "light-dismiss";
-  trigger: Element | null;
-}
+import {
+  SNYT_DIALOG_CANCEL_EVENT,
+  SNYT_DIALOG_CHANGE_EVENT,
+  SNYT_DIALOG_CLOSE_ATTRIBUTE,
+  SNYT_DIALOG_TAG_NAME,
+  SNYT_DIALOG_TRIGGER_ATTRIBUTE,
+} from "./constants.ts";
+import {
+  getClosestDialog,
+  queryDialogParts,
+  queryDialogStateElements,
+  syncDialogAccessibilityAttributes,
+} from "./parts.ts";
+import {
+  getDialogTriggerMode,
+  isDefaultTrueAttributeEnabled,
+  setDialogStateAttributes,
+} from "./state.ts";
+import type {
+  SnytDialogCancelEventDetail,
+  SnytDialogChangeEventDetail,
+  SnytDialogChangeReason,
+} from "./types.ts";
 
 const HTMLElementBase =
   globalThis.HTMLElement ??
@@ -49,29 +35,6 @@ const HTMLElementBase =
   });
 
 const modalDialogStack = new SnytOverlayStack<SnytDialogElement>();
-
-function isDefaultTrueAttributeEnabled(element: Element, name: string) {
-  const value = element.getAttribute(name);
-
-  return value === null || value !== "false";
-}
-
-function getTriggerMode(trigger: HTMLElement) {
-  const value = trigger.getAttribute(SNYT_DIALOG_TRIGGER_ATTRIBUTE);
-
-  return value === "show" || value === "non-modal" ? "show" : "show-modal";
-}
-
-function getClosestDialog(element: Element) {
-  return element.closest(SNYT_DIALOG_TAG_NAME) as Element | null;
-}
-
-function setStateAttributes(element: Element, open: boolean, modal: boolean) {
-  setBooleanAttribute(element, "data-open", open);
-  setBooleanAttribute(element, "data-closed", !open);
-  setBooleanAttribute(element, "data-modal", open && modal);
-  setStringAttribute(element, "data-state", open ? "open" : "closed");
-}
 
 export class SnytDialogElement extends HTMLElementBase {
   static observedAttributes = ["disabled", "dismissible", "dismissable", "open"];
@@ -198,7 +161,7 @@ export class SnytDialogElement extends HTMLElementBase {
       event.preventDefault();
       event.stopPropagation();
 
-      if (getTriggerMode(trigger) === "show") {
+      if (getDialogTriggerMode(trigger) === "show") {
         this.show(trigger, "trigger");
       } else {
         this.showModal(trigger, "trigger");
@@ -371,28 +334,19 @@ export class SnytDialogElement extends HTMLElementBase {
   private syncParts() {
     const previousPopup = this.popupElement;
 
-    this.popupElement =
-      this.querySelector<HTMLDialogElement>(`dialog[${SNYT_DIALOG_POPUP_ATTRIBUTE}]`) ??
-      this.querySelector("dialog");
+    const parts = queryDialogParts(this);
+    this.popupElement = parts.popupElement;
 
     if (previousPopup !== this.popupElement) {
       this.detachPopupListeners(previousPopup);
       this.attachPopupListeners();
     }
 
-    this.panelElement =
-      this.popupElement?.querySelector<HTMLElement>(`[${SNYT_DIALOG_PANEL_ATTRIBUTE}]`) ?? null;
-    this.titleElement =
-      this.popupElement?.querySelector<HTMLElement>(`[${SNYT_DIALOG_TITLE_ATTRIBUTE}]`) ?? null;
-    this.descriptionElement =
-      this.popupElement?.querySelector<HTMLElement>(`[${SNYT_DIALOG_DESCRIPTION_ATTRIBUTE}]`) ??
-      null;
-    this.triggerElements = Array.from(
-      this.querySelectorAll<HTMLElement>(`[${SNYT_DIALOG_TRIGGER_ATTRIBUTE}]`),
-    ).filter((element) => getClosestDialog(element) === this);
-    this.closeElements = Array.from(
-      this.querySelectorAll<HTMLElement>(`[${SNYT_DIALOG_CLOSE_ATTRIBUTE}]`),
-    ).filter((element) => getClosestDialog(element) === this);
+    this.panelElement = parts.panelElement;
+    this.titleElement = parts.titleElement;
+    this.descriptionElement = parts.descriptionElement;
+    this.triggerElements = parts.triggerElements;
+    this.closeElements = parts.closeElements;
 
     this.syncAccessibilityAttributes();
   }
@@ -410,49 +364,16 @@ export class SnytDialogElement extends HTMLElementBase {
   }
 
   private syncAccessibilityAttributes() {
-    if (!this.popupElement) {
-      return;
-    }
-
-    const popupId = ensureElementId(this.popupElement, "snyt-dialog-popup");
-
-    for (const trigger of this.triggerElements) {
-      if (trigger instanceof HTMLButtonElement) {
-        trigger.type ||= "button";
-        trigger.disabled = this.disabled;
-      }
-
-      setStringAttribute(trigger, "aria-haspopup", "dialog");
-      setStringAttribute(trigger, "aria-expanded", String(this.open));
-      setStringAttribute(trigger, "aria-controls", popupId);
-      setBooleanAttribute(trigger, "data-disabled", this.disabled);
-    }
-
-    for (const close of this.closeElements) {
-      if (close instanceof HTMLButtonElement) {
-        close.type ||= "button";
-      }
-    }
-
-    if (this.titleElement) {
-      setStringAttribute(
-        this.popupElement,
-        "aria-labelledby",
-        ensureElementId(this.titleElement, "snyt-dialog-title"),
-      );
-    } else {
-      this.popupElement.removeAttribute("aria-labelledby");
-    }
-
-    if (this.descriptionElement) {
-      setStringAttribute(
-        this.popupElement,
-        "aria-describedby",
-        ensureElementId(this.descriptionElement, "snyt-dialog-description"),
-      );
-    } else {
-      this.popupElement.removeAttribute("aria-describedby");
-    }
+    syncDialogAccessibilityAttributes({
+      closeElements: this.closeElements,
+      descriptionElement: this.descriptionElement,
+      disabled: this.disabled,
+      open: this.open,
+      panelElement: this.panelElement,
+      popupElement: this.popupElement,
+      titleElement: this.titleElement,
+      triggerElements: this.triggerElements,
+    });
   }
 
   private syncNestedState() {
@@ -484,20 +405,15 @@ export class SnytDialogElement extends HTMLElementBase {
     this.isSyncingAttributes = true;
     setBooleanAttribute(this, "open", open);
     setBooleanAttribute(this, "data-disabled", this.disabled);
-    setStateAttributes(this, open, modal);
+    setDialogStateAttributes(this, open, modal);
     this.isSyncingAttributes = false;
 
     this.syncAccessibilityAttributes();
 
-    const stateTargets = [
-      this.popupElement,
-      this.panelElement,
-      ...Array.from(this.querySelectorAll<HTMLElement>(`[${SNYT_DIALOG_VIEWPORT_ATTRIBUTE}]`)),
-      ...Array.from(this.querySelectorAll<HTMLElement>(`[${SNYT_DIALOG_BACKDROP_ATTRIBUTE}]`)),
-    ].filter((element): element is HTMLElement => element !== null);
+    const stateTargets = queryDialogStateElements(this, this.popupElement, this.panelElement);
 
     for (const element of stateTargets) {
-      setStateAttributes(element, open, modal);
+      setDialogStateAttributes(element, open, modal);
     }
   }
 }

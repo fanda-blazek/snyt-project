@@ -1,8 +1,0 @@
-import type { SnytComponentMetadata } from "../../src/component-metadata.ts";
-
-export const snytDialogPlan = {
-  description: "Modal and non-modal dialog primitive.",
-  name: "dialog",
-  status: "in-progress",
-  tagName: "snyt-dialog",
-} as const satisfies SnytComponentMetadata;
