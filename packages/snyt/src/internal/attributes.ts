@@ -6,18 +6,26 @@ export function isBooleanAttributePresent(element: Element, name: string) {
 
 export function setBooleanAttribute(element: Element, name: string, value: boolean) {
   if (value) {
-    element.setAttribute(name, "");
+    if (!element.hasAttribute(name)) {
+      element.setAttribute(name, "");
+    }
     return;
   }
 
-  element.removeAttribute(name);
+  if (element.hasAttribute(name)) {
+    element.removeAttribute(name);
+  }
 }
 
 export function setStringAttribute(element: Element, name: string, value: string | null) {
   if (value === null) {
-    element.removeAttribute(name);
+    if (element.hasAttribute(name)) {
+      element.removeAttribute(name);
+    }
     return;
   }
 
-  element.setAttribute(name, value);
+  if (element.getAttribute(name) !== value) {
+    element.setAttribute(name, value);
+  }
 }

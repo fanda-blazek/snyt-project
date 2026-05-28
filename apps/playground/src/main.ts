@@ -4,11 +4,33 @@ import typescriptLogo from "./assets/typescript.svg";
 import viteLogo from "./assets/vite.svg";
 import heroImg from "./assets/hero.png";
 import { setupCounter } from "./counter.ts";
-import { dialogDemoHtml, setupDialogDemo } from "./demos/dialog-demo.ts";
+import {
+  dialogDemoHtml,
+  dialogPageHtml,
+  setupDialogDemo,
+  setupDialogPage,
+} from "./demos/dialog-demo.ts";
 import { setupToggleDemo, toggleDemoHtml } from "./demos/toggle-demo.ts";
 
-document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
+const app = document.querySelector<HTMLDivElement>("#app")!;
+const isDialogPage = location.pathname === "/dialog";
+
+if (isDialogPage) {
+  app.innerHTML = `
+<nav class="top-nav" aria-label="Components">
+  <a href="/">Home</a>
+  <a href="/dialog">Dialog</a>
+</nav>
+${dialogPageHtml}
+`;
+  setupDialogPage();
+} else {
+  app.innerHTML = `
 <section id="center">
+  <nav class="top-nav" aria-label="Components">
+    <a href="/">Home</a>
+    <a href="/dialog">Dialog</a>
+  </nav>
   <div class="hero">
     <img src="${heroImg}" class="base" width="170" height="179">
     <img src="${typescriptLogo}" class="framework" alt="TypeScript logo"/>
@@ -67,6 +89,7 @@ ${dialogDemoHtml}
 <section id="spacer"></section>
 `;
 
-setupCounter(document.querySelector<HTMLButtonElement>("#counter")!);
-setupToggleDemo();
-setupDialogDemo();
+  setupCounter(document.querySelector<HTMLButtonElement>("#counter")!);
+  setupToggleDemo();
+  setupDialogDemo();
+}

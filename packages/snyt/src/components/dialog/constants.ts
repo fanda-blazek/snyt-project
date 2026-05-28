@@ -1,11 +1,6 @@
-export const SNYT_DIALOG_TAG_NAME = "snyt-dialog";
-export const SNYT_DIALOG_CHANGE_EVENT = "snyt-dialog-change";
-export const SNYT_DIALOG_CANCEL_EVENT = "snyt-dialog-cancel";
-export const SNYT_DIALOG_TRIGGER_ATTRIBUTE = "data-snyt-dialog-trigger";
-export const SNYT_DIALOG_POPUP_ATTRIBUTE = "data-snyt-dialog-popup";
-export const SNYT_DIALOG_VIEWPORT_ATTRIBUTE = "data-snyt-dialog-viewport";
-export const SNYT_DIALOG_BACKDROP_ATTRIBUTE = "data-snyt-dialog-backdrop";
-export const SNYT_DIALOG_PANEL_ATTRIBUTE = "data-snyt-dialog-panel";
-export const SNYT_DIALOG_TITLE_ATTRIBUTE = "data-snyt-dialog-title";
-export const SNYT_DIALOG_DESCRIPTION_ATTRIBUTE = "data-snyt-dialog-description";
-export const SNYT_DIALOG_CLOSE_ATTRIBUTE = "data-snyt-dialog-close";
+export const SNYT_DIALOG_ROOT_TAG_NAME = "snyt-dialog-root";
+export const SNYT_DIALOG_PANEL_TAG_NAME = "snyt-dialog-panel";
+export const SNYT_DIALOG_BACKDROP_TAG_NAME = "snyt-dialog-backdrop";
+export const SNYT_DIALOG_OPEN_EVENT = "open";
+export const SNYT_DIALOG_CLOSE_EVENT = "close";
+export const SNYT_DIALOG_CANCEL_EVENT = "cancel";
