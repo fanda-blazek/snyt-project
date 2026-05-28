@@ -1,4 +1,4 @@
-export type SnytComponentStatus = "planned" | "experimental" | "stable";
+export type SnytComponentStatus = "planned" | "in-progress" | "experimental" | "stable";
 
 export interface SnytComponentMetadata {
   description: string;

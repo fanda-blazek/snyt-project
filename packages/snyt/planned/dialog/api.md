@@ -2,10 +2,8 @@
 
 Status: planned
 
-## Goal
+Purpose: Open modal or non-modal content above the page.
 
-Accessible headless dialog primitive built on native browser APIs.
+Parts: root, trigger, portal, backdrop, viewport, popup, title, description, close.
 
-## Initial Shape
-
-To be decided.
+Native base: `<dialog>` where possible, dialog ARIA and focus management where needed.
