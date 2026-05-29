@@ -410,6 +410,33 @@ code {
   }
 }
 
+.native-dialog {
+  display: grid;
+  width: min(420px, calc(100vw - 32px));
+  gap: 22px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 22px;
+  background: var(--bg);
+  color: var(--text-h);
+  box-shadow: var(--shadow);
+  text-align: left;
+
+  &::backdrop {
+    background: rgb(8 6 13 / 18%);
+  }
+
+  h3 {
+    margin: 0 0 8px;
+    font: 600 20px/1.2 var(--heading);
+    color: var(--text-h);
+  }
+
+  p {
+    font-size: 15px;
+  }
+}
+
 .nested-popup {
   width: min(340px, calc(100vw - 32px));
 }
@@ -443,6 +470,7 @@ code {
   inset: 0;
   display: none;
   background: rgb(8 6 13 / 18%);
+  pointer-events: none;
 
   &[data-modal] {
     display: block;
