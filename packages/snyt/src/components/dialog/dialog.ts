@@ -3,6 +3,7 @@ import {
   setBooleanAttribute,
   setStringAttribute,
 } from "../../internal/attributes.ts";
+import { SnytElement } from "../../internal/base-element.ts";
 import { defineElement } from "../../internal/define-element.ts";
 import { SnytOverlayStack } from "../../internal/overlay-stack.ts";
 import { lockScroll } from "../../internal/scroll-lock.ts";
@@ -16,12 +17,6 @@ import {
 } from "./constants.ts";
 import { getDialogStateElements, queryDialogParts } from "./parts.ts";
 import { isDefaultTrueAttributeEnabled, setDialogStateAttributes } from "./state.ts";
-
-const HTMLElementBase =
-  globalThis.HTMLElement ??
-  (class {} as {
-    new (): HTMLElement;
-  });
 
 type DialogCloseMethod = HTMLDialogElement["close"];
 type DialogOpenMethod = HTMLDialogElement["show"];
@@ -37,25 +32,24 @@ export interface SnytDialogHideOptions {
 
 const modalDialogStack = new SnytOverlayStack<SnytDialogRootElement>();
 
-export class SnytDialogPanelElement extends HTMLElementBase {
-  connectedCallback() {
+export class SnytDialogPanelElement extends SnytElement {
+  protected mount() {
     this.setAttribute("data-snyt-component", "dialog-panel");
   }
 }
 
-export class SnytDialogBackdropElement extends HTMLElementBase {
-  connectedCallback() {
+export class SnytDialogBackdropElement extends SnytElement {
+  protected mount() {
     this.setAttribute("data-snyt-component", "dialog-backdrop");
   }
 }
 
-export class SnytDialogRootElement extends HTMLElementBase {
+export class SnytDialogRootElement extends SnytElement {
   static observedAttributes = ["disabled", "dismissible", "open"];
 
   private commandElements: HTMLButtonElement[] = [];
   private backdropElements: HTMLElement[] = [];
   private isModalOpen = false;
-  private isSyncingAttributes = false;
   private mutationObserver: MutationObserver | null = null;
   private originalClose: DialogCloseMethod | null = null;
   private originalRequestClose: ((returnValue?: string) => void) | null = null;
@@ -97,32 +91,31 @@ export class SnytDialogRootElement extends HTMLElementBase {
     setBooleanAttribute(this, "dismissible", value);
   }
 
-  connectedCallback() {
+  protected mount(signal: AbortSignal) {
     this.setAttribute("data-snyt-component", "dialog-root");
     this.syncParts();
-    this.observeChildren();
-    this.attachDocumentListeners();
+    this.observeChildren(signal);
+    this.attachDocumentListeners(signal);
     this.syncNestedState();
+
+    const shouldOpen = isBooleanAttributePresent(this, "open") && !this.popupElement?.open;
+
     this.syncStateAttributes();
 
-    if (isBooleanAttributePresent(this, "open") && !this.popupElement?.open) {
+    if (shouldOpen) {
       this.show();
     }
   }
 
-  disconnectedCallback() {
+  protected unmount() {
     this.mutationObserver?.disconnect();
-    this.detachDocumentListeners();
+    this.mutationObserver = null;
     this.detachPopupListeners();
     this.restoreNativeMethods();
     this.releaseOverlay();
   }
 
-  attributeChangedCallback(name: string) {
-    if (this.isSyncingAttributes) {
-      return;
-    }
-
+  protected onAttributeChange(name: string) {
     if (name === "open") {
       if (isBooleanAttributePresent(this, "open") && !this.popupElement?.open) {
         this.show();
@@ -315,7 +308,7 @@ export class SnytDialogRootElement extends HTMLElementBase {
     return this.dispatchEvent(new Event(SNYT_DIALOG_CANCEL_EVENT, { cancelable: true }));
   }
 
-  private observeChildren() {
+  private observeChildren(signal: AbortSignal) {
     this.mutationObserver?.disconnect();
 
     if (!globalThis.MutationObserver) {
@@ -332,6 +325,7 @@ export class SnytDialogRootElement extends HTMLElementBase {
       childList: true,
       subtree: true,
     });
+    signal.addEventListener("abort", () => this.mutationObserver?.disconnect(), { once: true });
   }
 
   private syncParts() {
@@ -361,14 +355,15 @@ export class SnytDialogRootElement extends HTMLElementBase {
     popup?.removeEventListener("close", this.handleNativeClose);
   }
 
-  private attachDocumentListeners() {
-    this.ownerDocument.addEventListener("pointerdown", this.handleDocumentPointerDown, true);
-    this.ownerDocument.addEventListener("click", this.handleDocumentClick, true);
-  }
-
-  private detachDocumentListeners() {
-    this.ownerDocument.removeEventListener("pointerdown", this.handleDocumentPointerDown, true);
-    this.ownerDocument.removeEventListener("click", this.handleDocumentClick, true);
+  private attachDocumentListeners(signal: AbortSignal) {
+    this.ownerDocument.addEventListener("pointerdown", this.handleDocumentPointerDown, {
+      capture: true,
+      signal,
+    });
+    this.ownerDocument.addEventListener("click", this.handleDocumentClick, {
+      capture: true,
+      signal,
+    });
   }
 
   private wrapNativeMethods() {
@@ -455,11 +450,11 @@ export class SnytDialogRootElement extends HTMLElementBase {
     const open = this.popupElement?.open ?? isBooleanAttributePresent(this, "open");
     const modal = open && this.isModalOpen;
 
-    this.isSyncingAttributes = true;
-    setBooleanAttribute(this, "open", open);
-    setBooleanAttribute(this, "data-disabled", this.disabled);
-    setDialogStateAttributes(this, open, modal);
-    this.isSyncingAttributes = false;
+    this.runAttributeSync(() => {
+      setBooleanAttribute(this, "open", open);
+      setBooleanAttribute(this, "data-disabled", this.disabled);
+      setDialogStateAttributes(this, open, modal);
+    });
 
     if (this.popupElement) {
       const stateTargets = getDialogStateElements({

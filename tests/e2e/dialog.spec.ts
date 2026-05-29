@@ -128,6 +128,28 @@ test("snyt-dialog-root opens with command buttons and syncs state, events, aria,
     .toEqual({ close: 1, open: 1 });
 });
 
+test("snyt-dialog-root opens from an initial open attribute", async ({ page }) => {
+  await page.goto("/");
+  await mountDialog(page, "open");
+
+  const root = page.locator("snyt-dialog-root#case");
+  const popup = page.locator("dialog#case-popup");
+  const panel = page.locator("snyt-dialog-panel#panel");
+  const backdrop = page.locator("snyt-dialog-backdrop#backdrop");
+  const open = page.locator("#open");
+  const outsideOpen = page.locator("#outside-open");
+
+  await expect(root).toHaveAttribute("open", "");
+  await expect(root).toHaveAttribute("data-state", "open");
+  await expect(root).toHaveAttribute("data-modal", "");
+  await expect(popup).toHaveAttribute("open", "");
+  await expect(popup).toHaveAttribute("data-state", "open");
+  await expect(panel).toHaveAttribute("data-state", "open");
+  await expect(backdrop).toHaveAttribute("data-state", "open");
+  await expect(open).toHaveAttribute("aria-expanded", "true");
+  await expect(outsideOpen).toHaveAttribute("aria-expanded", "true");
+});
+
 test("snyt-dialog-root supports preventable request-close, Escape, and light dismiss", async ({
   page,
 }) => {

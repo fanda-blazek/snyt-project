@@ -24,7 +24,7 @@ V1 should stay close to the platform:
 <snyt-autocomplete-root>
   <input name="user" autocomplete="off" />
 
-  <button type="button" data-autocomplete-trigger>Toggle suggestions</button>
+  <button type="button" data-snyt-autocomplete-trigger>Toggle suggestions</button>
 
   <snyt-autocomplete-options>
     <snyt-autocomplete-option value="Wade Cooper">Wade Cooper</snyt-autocomplete-option>
@@ -58,7 +58,7 @@ Enhanced attributes:
 
 ### Trigger
 
-Optional normal button marked with `data-autocomplete-trigger`.
+Optional normal button marked with `data-snyt-autocomplete-trigger`.
 
 The root owns trigger behavior. V1 does not use `command`, `commandfor`, or
 custom command events.

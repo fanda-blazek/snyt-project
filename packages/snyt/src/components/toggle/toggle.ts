@@ -3,6 +3,7 @@ import {
   setBooleanAttribute,
   setStringAttribute,
 } from "../../internal/attributes.ts";
+import { SnytElement } from "../../internal/base-element.ts";
 import { defineElement } from "../../internal/define-element.ts";
 import { dispatchSnytChangeEvent } from "../../internal/events.ts";
 
@@ -18,13 +19,7 @@ export interface SnytToggleChangeEventDetail {
   trigger: Element | null;
 }
 
-const HTMLElementBase =
-  globalThis.HTMLElement ??
-  (class {} as {
-    new (): HTMLElement;
-  });
-
-export class SnytToggleElement extends HTMLElementBase {
+export class SnytToggleElement extends SnytElement {
   static observedAttributes = ["pressed", "disabled"];
 
   private triggerElement: HTMLElement | null = null;
@@ -45,18 +40,14 @@ export class SnytToggleElement extends HTMLElementBase {
     setBooleanAttribute(this, "disabled", value);
   }
 
-  connectedCallback() {
+  protected mount(signal: AbortSignal) {
     this.setAttribute("data-snyt-component", "toggle");
-    this.addEventListener("click", this.handleClick);
+    this.addEventListener("click", this.handleClick, { signal });
     this.syncTrigger();
     this.syncStateAttributes();
   }
 
-  disconnectedCallback() {
-    this.removeEventListener("click", this.handleClick);
-  }
-
-  attributeChangedCallback() {
+  protected onAttributeChange() {
     this.syncTrigger();
     this.syncStateAttributes();
   }

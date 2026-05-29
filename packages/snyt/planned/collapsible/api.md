@@ -24,9 +24,9 @@ V1 should stay close to the platform:
 
 ```html
 <snyt-collapsible>
-  <button type="button" data-collapsible-trigger>Toggle details</button>
+  <button type="button" data-snyt-collapsible-trigger>Toggle details</button>
 
-  <div data-collapsible-panel hidden>Details content</div>
+  <div data-snyt-collapsible-panel hidden>Details content</div>
 </snyt-collapsible>
 ```
 
@@ -40,7 +40,7 @@ The root is responsible for state sync, ARIA sync, trigger behavior, and methods
 
 ### Trigger
 
-Author-provided button marked with `data-collapsible-trigger`.
+Author-provided button marked with `data-snyt-collapsible-trigger`.
 
 Enhanced attributes:
 
@@ -52,7 +52,7 @@ V1 does not use `command`, `commandfor`, or custom command events.
 
 ### Panel
 
-Author-provided element marked with `data-collapsible-panel`.
+Author-provided element marked with `data-snyt-collapsible-panel`.
 
 Enhanced attributes:
 
