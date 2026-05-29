@@ -2,10 +2,18 @@ import { defineConfig } from "vite-plus";
 
 export default defineConfig({
   pack: {
+    entry: [
+      "src/index.ts",
+      "src/define.ts",
+      "src/toggle.ts",
+      "src/toggle/define.ts",
+      "src/dialog.ts",
+      "src/dialog/define.ts",
+      "src/types.ts",
+    ],
     dts: {
       tsgo: true,
     },
-    exports: true,
   },
   lint: {
     options: {

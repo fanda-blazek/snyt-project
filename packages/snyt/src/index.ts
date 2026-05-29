@@ -21,11 +21,18 @@ export {
   type SnytToggleChangeReason,
 } from "./components/index.ts";
 export { type SnytComponentMetadata, type SnytComponentStatus } from "./component-metadata.ts";
-import { defineSnytDialog, defineSnytToggle } from "./components/index.ts";
+export type {
+  SnytBooleanAttribute,
+  SnytDialogBackdropAttributes,
+  SnytDialogPanelAttributes,
+  SnytDialogRootAttributes,
+  SnytElementAttributes,
+  SnytElements,
+  SnytStringAttribute,
+  SnytToggleAttributes,
+} from "./types.ts";
+import "./define.ts";
 
 export const snytElementPrefix = "snyt";
 
 export type SnytElementName = `${typeof snytElementPrefix}-${string}`;
-
-defineSnytToggle();
-defineSnytDialog();

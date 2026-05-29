@@ -4,6 +4,8 @@ Headless UI primitives built on native Custom Elements.
 
 This package contains the runtime code for Snyt. Components will be added here as framework-agnostic Custom Elements with no runtime dependencies.
 
+Project direction and component authoring rules are documented in [Snyt Principles](../../docs/principles.md).
+
 ## Toggle
 
 ```html

@@ -14,6 +14,8 @@ Snyt is an experimental open-source library of framework-agnostic, unstyled UI p
 - Accessibility as a core contract
 - Small output for npm and CDN usage
 
+See [Snyt Principles](./docs/principles.md) for the project decision rules.
+
 ## Distribution Goal
 
 Snyt should work both as an npm package for bundler-based apps and as a small standalone script for plain HTML usage.
