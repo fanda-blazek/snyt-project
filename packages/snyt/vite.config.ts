@@ -5,9 +5,9 @@ export default defineConfig({
     entry: [
       "src/index.ts",
       "src/define.ts",
-      "src/toggle.ts",
+      "src/toggle/index.ts",
       "src/toggle/define.ts",
-      "src/dialog.ts",
+      "src/dialog/index.ts",
       "src/dialog/define.ts",
       "src/types.ts",
     ],

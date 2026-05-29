@@ -1,4 +1,4 @@
-import type { SnytComponentMetadata } from "../../component-metadata.ts";
+import type { SnytComponentMetadata } from "../component-metadata.ts";
 
 export const snytDialogComponent = {
   description: "Native-first dialog root primitive.",

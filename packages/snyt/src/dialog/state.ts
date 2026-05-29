@@ -1,4 +1,4 @@
-import { setBooleanAttribute, setStringAttribute } from "../../internal/attributes.ts";
+import { setBooleanAttribute, setStringAttribute } from "../internal/attributes.ts";
 
 export function isDefaultTrueAttributeEnabled(element: Element, name: string) {
   const value = element.getAttribute(name);

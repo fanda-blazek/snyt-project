@@ -24,16 +24,16 @@
       "default": "./dist/define.mjs"
     },
     "./dialog": {
-      "types": "./dist/dialog.d.mts",
-      "default": "./dist/dialog.mjs"
+      "types": "./dist/dialog/index.d.mts",
+      "default": "./dist/dialog/index.mjs"
     },
     "./dialog/define": {
       "types": "./dist/dialog/define.d.mts",
       "default": "./dist/dialog/define.mjs"
     },
     "./toggle": {
-      "types": "./dist/toggle.d.mts",
-      "default": "./dist/toggle.mjs"
+      "types": "./dist/toggle/index.d.mts",
+      "default": "./dist/toggle/index.mjs"
     },
     "./toggle/define": {
       "types": "./dist/toggle/define.d.mts",

@@ -12,9 +12,9 @@ const packageJson = JSON.parse(
 test("runtime entrypoints import without a browser custom element registry", async () => {
   await expect(import("../src/index.ts")).resolves.toBeDefined();
   await expect(import("../src/define.ts")).resolves.toBeDefined();
-  await expect(import("../src/toggle.ts")).resolves.toBeDefined();
+  await expect(import("../src/toggle/index.ts")).resolves.toBeDefined();
   await expect(import("../src/toggle/define.ts")).resolves.toBeDefined();
-  await expect(import("../src/dialog.ts")).resolves.toBeDefined();
+  await expect(import("../src/dialog/index.ts")).resolves.toBeDefined();
   await expect(import("../src/dialog/define.ts")).resolves.toBeDefined();
   await expect(import("../src/types.ts")).resolves.toBeDefined();
 });
@@ -30,16 +30,16 @@ test("package exports expose granular entrypoints with declarations", () => {
       types: "./dist/define.d.mts",
     },
     "./dialog": {
-      default: "./dist/dialog.mjs",
-      types: "./dist/dialog.d.mts",
+      default: "./dist/dialog/index.mjs",
+      types: "./dist/dialog/index.d.mts",
     },
     "./dialog/define": {
       default: "./dist/dialog/define.mjs",
       types: "./dist/dialog/define.d.mts",
     },
     "./toggle": {
-      default: "./dist/toggle.mjs",
-      types: "./dist/toggle.d.mts",
+      default: "./dist/toggle/index.mjs",
+      types: "./dist/toggle/index.d.mts",
     },
     "./toggle/define": {
       default: "./dist/toggle/define.mjs",

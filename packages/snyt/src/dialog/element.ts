@@ -2,11 +2,11 @@ import {
   isBooleanAttributePresent,
   setBooleanAttribute,
   setStringAttribute,
-} from "../../internal/attributes.ts";
-import { SnytElement } from "../../internal/base-element.ts";
-import { defineElement } from "../../internal/define-element.ts";
-import { SnytOverlayStack } from "../../internal/overlay-stack.ts";
-import { lockScroll } from "../../internal/scroll-lock.ts";
+} from "../internal/attributes.ts";
+import { SnytElement } from "../internal/base-element.ts";
+import { defineElement } from "../internal/define-element.ts";
+import { SnytOverlayStack } from "../internal/overlay-stack.ts";
+import { lockScroll } from "../internal/scroll-lock.ts";
 import {
   SNYT_DIALOG_BACKDROP_TAG_NAME,
   SNYT_DIALOG_CANCEL_EVENT,

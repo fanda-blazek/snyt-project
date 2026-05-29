@@ -4,7 +4,7 @@ export {
   type SnytDialogHideOptions,
   SnytDialogPanelElement,
   SnytDialogRootElement,
-} from "./dialog.ts";
+} from "./element.ts";
 export {
   SNYT_DIALOG_CANCEL_EVENT,
   SNYT_DIALOG_BACKDROP_TAG_NAME,

@@ -2,10 +2,10 @@ import {
   isBooleanAttributePresent,
   setBooleanAttribute,
   setStringAttribute,
-} from "../../internal/attributes.ts";
-import { SnytElement } from "../../internal/base-element.ts";
-import { defineElement } from "../../internal/define-element.ts";
-import { dispatchSnytChangeEvent } from "../../internal/events.ts";
+} from "../internal/attributes.ts";
+import { SnytElement } from "../internal/base-element.ts";
+import { defineElement } from "../internal/define-element.ts";
+import { dispatchSnytChangeEvent } from "../internal/events.ts";
 
 export const SNYT_TOGGLE_TAG_NAME = "snyt-toggle";
 export const SNYT_TOGGLE_CHANGE_EVENT = "snyt-toggle-change";

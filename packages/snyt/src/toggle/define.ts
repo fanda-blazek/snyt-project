@@ -1,3 +1,3 @@
-import { defineSnytToggle } from "../components/toggle/index.ts";
+import { defineSnytToggle } from "./index.ts";
 
 defineSnytToggle();

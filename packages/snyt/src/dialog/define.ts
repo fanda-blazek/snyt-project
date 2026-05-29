@@ -1,3 +1,3 @@
-import { defineSnytDialog } from "../components/dialog/index.ts";
+import { defineSnytDialog } from "./index.ts";
 
 defineSnytDialog();
